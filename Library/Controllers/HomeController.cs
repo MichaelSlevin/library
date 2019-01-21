@@ -12,7 +12,15 @@ namespace Library.Controllers
     {
         public IActionResult Index()
         {
-            return View();
+            User newUser = new User
+            {
+                FullName = "test user",
+                Username = "testUser1",
+                Email = "test@test.com",
+                PhoneNumber = "12345",
+                Password = "abcde"
+            };
+            return View(newUser);
         }
 
         public IActionResult About()
