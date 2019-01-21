@@ -3,7 +3,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Library.Migrations
 {
-    public partial class Initial : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -41,9 +41,9 @@ namespace Library.Migrations
                     table.PrimaryKey("PK_Id", x => x.Id);
                 });
             migrationBuilder.AddForeignKey(
-                name: "FK_Posts_Users_UserId",
-                table: "Posts",
-                column: "UserId",
+                name: "FK_Books_Users_UserID",
+                table: "Books",
+                column: "OwnerId",
                 principalTable: "Users",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
