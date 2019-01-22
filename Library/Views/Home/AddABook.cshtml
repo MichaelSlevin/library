@@ -3,18 +3,18 @@
 }
 @Model.Username
 
-<h1>@($"{Model.FullName}"), please enter 
+<h1>@($"{Model.FullName}"), please enter
 the details of your book below:</h1>
 
-<form method="post" action="/Index">
-    <p> Title: <input type="text" name="Title" /> 
+<form method="post" action="/Home/AddABook">
+    <p> Title: <input type="text" name="title" />
     </p>
     <p>
-        Author: <input type="text" name="Author" />
+        Author: <input type="text" name="author" />
     </p>
     <p>
-        ISBN: <input type="text" name="ISBN" />
-    </p> 
+        ISBN: <input type="text" name="isbn" />
+    </p>
+    <input type="hidden" name="ownerid" value=@($"{Model.Id}")>
     <input type="submit" value="Submit">
 </form>
-
