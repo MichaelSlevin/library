@@ -21,4 +21,7 @@
     <Folder Include="Tests\" />
     <Folder Include="Migrations\" />
   </ItemGroup>
+  <!-- <ItemGroup>
+    <Content Include="Views\Home\Bookshelf.cshtml" />
+  </ItemGroup> -->
 </Project>

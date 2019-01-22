@@ -35,25 +35,26 @@ namespace Library.Controllers
             return View(newUser);
         }
 
-        public IActionResult About()
+        public IActionResult SignUp()
         {
-            ViewData["Message"] = "Your application description page.";
+            ViewData["Message"] = "Please complete the following fields";
 
             return View();
         }
 
-        public IActionResult Contact()
+        public IActionResult AllBooks()
         {
-            ViewData["Message"] = "Your contact page.";
+            ViewData["Message"] = "All books in the library";
 
             return View();
         }
 
-        public IActionResult Privacy()
+        public IActionResult SignIn()
         {
             return View();
         }
 
+     
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
