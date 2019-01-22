@@ -1,0 +1,20 @@
+﻿@{
+    ViewData["Title"] = "Add A Book";
+}
+@Model.Username
+
+<h1>@($"{Model.FullName}"), please enter 
+the details of your book below:</h1>
+
+<form method="post" action="/Index">
+    <p> Title: <input type="text" name="Title" /> 
+    </p>
+    <p>
+        Author: <input type="text" name="Author" />
+    </p>
+    <p>
+        ISBN: <input type="text" name="ISBN" />
+    </p> 
+    <input type="submit" value="Submit">
+</form>
+

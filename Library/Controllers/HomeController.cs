@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Library.Models;
 
@@ -20,6 +21,17 @@ namespace Library.Controllers
                 PhoneNumber = "12345",
                 Password = "abcde"
             };
+
+            HttpContext.Session.SetObjectAsJson("newUser", newUser);
+            return View(newUser);
+        }
+
+        public IActionResult AddABook()
+        {
+            User newUser = HttpContext.Session.GetObjectFromJson<User>("newUser");
+            @ViewData["newUser"] = newUser;
+            Console.WriteLine("newUser's Username is " + newUser.Username);
+
             return View(newUser);
         }
 
