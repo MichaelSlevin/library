@@ -20,7 +20,7 @@ namespace Library.Controllers
         }
 
         public IActionResult Index()
-        { 
+        {
             return View();
         }
 
@@ -61,7 +61,7 @@ namespace Library.Controllers
             Console.WriteLine($"Password is {password}");
             Console.WriteLine("The form is triggering the post");
 
-            User newUser = new User(); 
+            User newUser = new User();
             newUser = _context.Users.Where(x => x.Email == email).Single();
             string dbPassword = newUser.Password;
             if (password == dbPassword)
@@ -83,8 +83,25 @@ namespace Library.Controllers
             User newUser = HttpContext.Session.GetObjectFromJson<User>("newUser");
             @ViewData["newUser"] = newUser;
             Console.WriteLine("newUser's Username is " + newUser.Username);
-
             return View(newUser);
+        }
+
+
+
+        public IActionResult MyBookshelf()
+        {
+            long UserId = HttpContext.Session.GetObjectFromJson<User>("newUser").Id;
+            // long Books = _context.Users.Where(x => x.Username == username).Select(x => x.Id).First();
+            Bookshelf newBookshelf = new Bookshelf(UserId, _context);
+            return View(newBookshelf);
+        }
+
+        [HttpPost]
+        public IActionResult AddABook(string author, string title, string isbn, long ownerid)
+        {
+            _context.Books.Add(new Book { Author = author, Title = title, ISBN = isbn, OwnerId = ownerid, Available = true  });
+            _context.SaveChanges();
+            return Redirect("/Home/AddABook");
         }
 
         public IActionResult SignOut()
