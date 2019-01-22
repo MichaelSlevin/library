@@ -11,6 +11,13 @@ namespace Library.Controllers
 {
     public class HomeController : Controller
     {
+        readonly LibraryContext _context;
+
+        public HomeController(LibraryContext context)
+        {
+            _context = context;
+        }
+
         public IActionResult Index()
         {
             User newUser = new User
@@ -21,6 +28,8 @@ namespace Library.Controllers
                 PhoneNumber = "12345",
                 Password = "abcde"
             };
+            _context.Users.Add(newUser);
+            _context.SaveChanges();
 
             HttpContext.Session.SetObjectAsJson("newUser", newUser);
             return View(newUser);
@@ -52,6 +61,14 @@ namespace Library.Controllers
         public IActionResult Privacy()
         {
             return View();
+        }
+
+        [HttpPost]
+        public IActionResult AddABook(string author, string title, string isbn, long ownerid)
+        {
+            _context.Books.Add(new Book { Author = author, Title = title, ISBN = isbn, OwnerId = ownerid  });
+            _context.SaveChanges();
+            return Redirect("/");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
