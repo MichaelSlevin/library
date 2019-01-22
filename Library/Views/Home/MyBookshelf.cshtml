@@ -1,0 +1,24 @@
+@{
+    ViewData["Title"] = "My Bookshelf";
+}
+@* Model.UserId *@
+
+<h1>My bookshelf</h1>
+@foreach (var book in @Model.getBooks())
+{
+    <p>New book - styling must be added</p>
+    @book.Title;
+    <br />
+    @book.Author;
+    @if (@book.Available)
+    {
+      <p>The book is available</p>
+    }
+    else
+    {
+      <p>The book is not available</p>
+    };
+
+    <br />
+
+}

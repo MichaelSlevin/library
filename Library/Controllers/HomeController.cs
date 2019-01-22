@@ -63,12 +63,20 @@ namespace Library.Controllers
             return View();
         }
 
+        public IActionResult MyBookshelf()
+        {
+            long UserId = HttpContext.Session.GetObjectFromJson<User>("newUser").Id;
+            // long Books = _context.Users.Where(x => x.Username == username).Select(x => x.Id).First();
+            Bookshelf newBookshelf = new Bookshelf(UserId, _context);
+            return View(newBookshelf);
+        }
+
         [HttpPost]
         public IActionResult AddABook(string author, string title, string isbn, long ownerid)
         {
-            _context.Books.Add(new Book { Author = author, Title = title, ISBN = isbn, OwnerId = ownerid  });
+            _context.Books.Add(new Book { Author = author, Title = title, ISBN = isbn, OwnerId = ownerid, Available = true  });
             _context.SaveChanges();
-            return Redirect("/");
+            return Redirect("/Home/AddABook");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
