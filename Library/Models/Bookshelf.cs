@@ -14,14 +14,21 @@ namespace Library.Models
         public IEnumerable<Book> my_books;
         public User Owner;
         public long UserId;
+        public bool Empty = true;
+
         public Bookshelf(long userid, LibraryContext context)
         {
+
             this.UserId = userid;
             this._context = context;
             var books =  this._context.Books.ToList();
             this.my_books = books.Where(book => book.OwnerId == userid);
+            if (this.my_books.Count() > 0 )
+            {
+              this.Empty = false;
+            }
             Console.WriteLine(my_books);
-            Console.WriteLine(my_books.First());
+            // Console.WriteLine(my_books.First());
         }
         public IEnumerable<Book> getBooks()
         {

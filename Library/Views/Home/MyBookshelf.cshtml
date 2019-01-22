@@ -4,21 +4,27 @@
 @* Model.UserId *@
 
 <h1>My bookshelf</h1>
-@foreach (var book in @Model.getBooks())
+@if (@Model.Empty)
 {
-    <p>New book - styling must be added</p>
-    @book.Title;
-    <br />
-    @book.Author;
-    @if (@book.Available)
-    {
-      <p>The book is available</p>
-    }
-    else
-    {
-      <p>The book is not available</p>
-    };
+  <p>You currently have 0 books on your bookshelf</p>
+}
+else
+{
+  @foreach (var book in @Model.getBooks())
+  {
+      <p>New book - styling must be added</p>
+      @book.Title;
+      <br />
+      @book.Author;
+      @if (@book.Available)
+      {
+        <p>The book is available</p>
+      }
+      else
+      {
+        <p>The book is not available</p>
+      };
 
-    <br />
-
+      <br />
+  }
 }
