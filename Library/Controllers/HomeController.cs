@@ -29,6 +29,11 @@ namespace Library.Controllers
             return View();
         }
 
+        public IActionResult SignIn()
+        {
+            return View();
+        }
+
         public IActionResult AddUser(string fullName, string username, string email, string phoneNumber, string password)
         {
             Console.WriteLine($"Username is {username}");
@@ -47,6 +52,23 @@ namespace Library.Controllers
             HttpContext.Session.SetObjectAsJson("newUser", newUser);
 
             return Redirect($"Profile/{newUser.Username}");
+        }
+
+        [HttpPost]
+        public IActionResult VerifyUser(string email, string password)
+        {
+            Console.WriteLine($"Email is {email}");
+            Console.WriteLine($"Password is {password}");
+            Console.WriteLine("The form is triggering the post");
+
+            User newUser = new User(); 
+            newUser = _context.Users.Where(x => x.Email == email).Single();
+            string dbPassword = newUser.Password;
+            if (password == dbPassword)
+            {
+                HttpContext.Session.SetObjectAsJson("newUser", newUser);
+            }
+            return Redirect("/");
         }
 
         public IActionResult Profile(string username)
