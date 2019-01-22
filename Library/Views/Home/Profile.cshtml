@@ -1,13 +1,12 @@
 ﻿@{
-    ViewData["Title"] = "Test Lending Library Home Page";
+    ViewData["Title"] = "Home Page";
 }
+@Model.Username
 
-<form method="get" action="/Home/Register">
-    <input type="submit" value="Register">
-</form>
+<h1>hello @($"{Model.FullName}")</h1>
 
-<form method="get" action="/Home/SignIn">
-    <input type="submit" value="Sign In">
+<form method="get" action="/Home/AddABook">
+    <input type="submit" value="Add A Book">
 </form>
 @*<div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="6000">
         <ol class="carousel-indicators">
