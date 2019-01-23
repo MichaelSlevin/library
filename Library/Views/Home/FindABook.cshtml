@@ -1,0 +1,29 @@
+﻿@{
+    ViewData["Title"] = "Find A Book";
+}
+ @*Model.Id*@ 
+
+
+@foreach (var book in @Model.GetAllBooksWithUser())
+{
+
+    <p>New book - styling must be added</p>
+    @book.Title;
+    <br />
+    @book.Author;
+    <br />
+
+    @if (book.Available == true)
+    {
+        <select>
+            <option value="Request">Request</option>
+            <option value="Name">Name: @book.FullName</option>
+            <option value="Email">Email: @book.Email</option>
+            <option value="Phone Number">Phone: @book.PhoneNumber</option>
+        </select>
+    }
+    else 
+    {
+        <p>NOT AVAILABLE</p> 
+    }
+}

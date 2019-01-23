@@ -10,18 +10,18 @@ namespace Library.Models
     public class BookList
     {
         readonly LibraryContext _context;
-        public IEnumerable<Book> AllBooks;
+        public List<BookWithUser> AllBooksWithUser;
+        
 
-        public BookList(LibraryContext context)
+        public BookList(LibraryContext context, List<BookWithUser> booksWithUser)
         {
             this._context = context;
-            this.AllBooks = this._context.Books.ToList();
+            this.AllBooksWithUser = booksWithUser;
         }
 
-        public IEnumerable<Book> GetAllBooks()
+        public IEnumerable<BookWithUser> GetAllBooksWithUser()
         {
-            return this.AllBooks;
+            return this.AllBooksWithUser;
         }
-
     }
 }
