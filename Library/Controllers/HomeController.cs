@@ -91,7 +91,6 @@ namespace Library.Controllers
         public IActionResult MyBookshelf()
         {
             long UserId = HttpContext.Session.GetObjectFromJson<User>("newUser").Id;
-            // long Books = _context.Users.Where(x => x.Username == username).Select(x => x.Id).First();
             Bookshelf newBookshelf = new Bookshelf(UserId, _context);
             return View(newBookshelf);
         }
@@ -113,11 +112,6 @@ namespace Library.Controllers
         [HttpPost]
         public IActionResult RemoveBook(long id, long userid)
         {
-            // var books = _context.Books.ToList();
-            // Book bookToBeRemoved = new Book();
-            // bookToBeRemoved = books.Where(book => book.Id == id);
-            // _context.Books.Delete(bookToBeRemoved);
-            // _context.SaveChanges;
             _context.Remove(_context.Books.Single(a => a.Id == id));
             _context.SaveChanges();
             return Redirect("/Home/MyBookshelf");
