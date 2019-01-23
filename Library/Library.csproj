@@ -22,4 +22,7 @@
     <Folder Include="Tests\" />
     <Folder Include="Migrations\" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Tests\Bookshelf.cs" />
+  </ItemGroup>
 </Project>
