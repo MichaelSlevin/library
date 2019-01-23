@@ -2,13 +2,21 @@
     ViewData["Title"] = "Test Lending Library Home Page";
 }
 
+<form method="post" action="/Home/VerifyUser">
+    <p>
+        Email: <input type="text" name="email" />
+    </p>
+    <p>
+        Password: <input type="text" name="password" />
+    </p>
+    <input type="submit" value="Sign in">
+</form>
+
 <form method="get" action="/Home/Register">
     <input type="submit" value="Register">
 </form>
 
-<form method="get" action="/Home/SignIn">
-    <input type="submit" value="Sign In">
-</form>
+
 @*<div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="6000">
         <ol class="carousel-indicators">
             <li data-target="#myCarousel" data-slide-to="0" class="active"></li>

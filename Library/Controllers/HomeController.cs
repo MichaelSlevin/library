@@ -21,7 +21,17 @@ namespace Library.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            Console.WriteLine("Printing the empty session object---------------------------------------------");
+
+            if(HttpContext.Session.GetObjectFromJson<User>("newUser") == null)
+            {
+              return View();
+            }
+            else
+            {
+              return Redirect("/Home/MyBookshelf");
+            }
+
         }
 
         public IActionResult Register()
@@ -29,10 +39,6 @@ namespace Library.Controllers
             return View();
         }
 
-        public IActionResult SignIn()
-        {
-            return View();
-        }
 
         public IActionResult AddUser(string fullName, string username, string email, string phoneNumber, string password)
         {
@@ -51,7 +57,7 @@ namespace Library.Controllers
             _context.SaveChanges();
             HttpContext.Session.SetObjectAsJson("newUser", newUser);
 
-            return Redirect($"Profile/{newUser.Username}");
+            return Redirect("/");
         }
 
         [HttpPost]
@@ -71,28 +77,29 @@ namespace Library.Controllers
             return Redirect("/");
         }
 
-        public IActionResult Profile(string username)
-        {
-            User newUser = HttpContext.Session.GetObjectFromJson<User>("newUser");
-            @ViewData["newUser"] = newUser;
-            return View(newUser);
-        }
-
-        public IActionResult AddABook()
-        {
-            User newUser = HttpContext.Session.GetObjectFromJson<User>("newUser");
-            @ViewData["newUser"] = newUser;
-            Console.WriteLine("newUser's Username is " + newUser.Username);
-            return View(newUser);
-        }
-
 
 
         public IActionResult MyBookshelf()
         {
+            if(HttpContext.Session.GetObjectFromJson<User>("newUser") == null)
+            {
+                return Redirect("/");
+            }
             long UserId = HttpContext.Session.GetObjectFromJson<User>("newUser").Id;
             Bookshelf newBookshelf = new Bookshelf(UserId, _context);
             return View(newBookshelf);
+        }
+
+        public IActionResult AddABook()
+        {
+            if(HttpContext.Session.GetObjectFromJson<User>("newUser") == null)
+            {
+                return Redirect("/");
+            }
+            User newUser = HttpContext.Session.GetObjectFromJson<User>("newUser");
+            @ViewData["newUser"] = newUser;
+            Console.WriteLine("newUser's Username is " + newUser.Username);
+            return View(newUser);
         }
 
         [HttpPost]
@@ -100,7 +107,7 @@ namespace Library.Controllers
         {
             _context.Books.Add(new Book { Author = author, Title = title, ISBN = isbn, OwnerId = ownerid, Available = true  });
             _context.SaveChanges();
-            return Redirect("/Home/AddABook");
+            return Redirect("/Home/MyBookshelf");
         }
 
         public IActionResult SignOut()
