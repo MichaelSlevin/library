@@ -6,9 +6,9 @@ namespace Library.Tests
 {
     public class UserSpec
     {
-        [Test(Description = "User has a Username")]
+        [Test(Description = "User has details")]
 
-        public void HasUsername()
+        public void HasDetails()
         {
             // arrange
             User user = new User
@@ -22,7 +22,11 @@ namespace Library.Tests
             // act
 
             // assert
+            Assert.AreEqual(user.FullName, "Test User");
             Assert.AreEqual(user.Username, "TestUser");
+            Assert.AreEqual(user.Email, "Email@Email.com");
+            Assert.AreEqual(user.PhoneNumber, "0788161523715");
+            Assert.AreEqual(user.Password, "password");
         }
     }
 }
