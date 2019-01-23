@@ -110,6 +110,28 @@ namespace Library.Controllers
             return Redirect("/");
         }
 
+        [HttpPost]
+        public IActionResult RemoveBook(long id, long userid)
+        {
+            // var books = _context.Books.ToList();
+            // Book bookToBeRemoved = new Book();
+            // bookToBeRemoved = books.Where(book => book.Id == id);
+            // _context.Books.Delete(bookToBeRemoved);
+            // _context.SaveChanges;
+            _context.Remove(_context.Books.Single(a => a.Id == id));
+            _context.SaveChanges();
+            return Redirect("/Home/MyBookshelf");
+        }
+
+        [HttpPost]
+        public IActionResult ChangeAvailability(long id, long userid, bool availability)
+        {
+            var book = _context.Books.First(a => a.Id == id);
+            book.Available = availability;
+            _context.SaveChanges();
+            return Redirect("/Home/MyBookshelf");
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

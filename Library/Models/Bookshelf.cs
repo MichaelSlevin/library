@@ -11,10 +11,13 @@ namespace Library.Models
     public class Bookshelf
     {
         readonly LibraryContext _context;
-        public IEnumerable<Book> my_books;
+        public IEnumerable<Book> AvailableBooks;
+        public IEnumerable<Book> UnavailableBooks;
+
         public User Owner;
         public long UserId;
-        public bool Empty = true;
+        public bool NoAvailableBooks = true;
+        public bool NoUnavailableBooks = true;
 
         public Bookshelf(long userid, LibraryContext context)
         {
@@ -22,17 +25,25 @@ namespace Library.Models
             this.UserId = userid;
             this._context = context;
             var books =  this._context.Books.ToList();
-            this.my_books = books.Where(book => book.OwnerId == userid);
-            if (this.my_books.Count() > 0 )
+            this.AvailableBooks = books.Where(book => book.OwnerId == userid && book.Available == true);
+            this.UnavailableBooks = books.Where(book => book.OwnerId == userid && book.Available == false);
+            if (this.AvailableBooks.Count() > 0 )
             {
-              this.Empty = false;
+              this.NoAvailableBooks = false;
             }
-            Console.WriteLine(my_books);
-            // Console.WriteLine(my_books.First());
+            if (this.UnavailableBooks.Count() > 0 )
+            {
+              this.NoUnavailableBooks = false;
+            }
+
         }
-        public IEnumerable<Book> getBooks()
+        public IEnumerable<Book> getAvailableBooks()
         {
-          return this.my_books;
+          return this.AvailableBooks;
+        }
+        public IEnumerable<Book> getUnavailableBooks()
+        {
+          return this.UnavailableBooks;
         }
     }
 }
