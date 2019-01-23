@@ -39,10 +39,6 @@ namespace Library.Controllers
             return View();
         }
 
-        public IActionResult SignIn()
-        {
-            return View();
-        }
 
         public IActionResult AddUser(string fullName, string username, string email, string phoneNumber, string password)
         {
@@ -85,13 +81,21 @@ namespace Library.Controllers
 
         public IActionResult MyBookshelf()
         {
+            if(HttpContext.Session.GetObjectFromJson<User>("newUser") == null)
+            {
+                return Redirect("/");
+            }
             long UserId = HttpContext.Session.GetObjectFromJson<User>("newUser").Id;
             Bookshelf newBookshelf = new Bookshelf(UserId, _context);
             return View(newBookshelf);
         }
-        
+
         public IActionResult AddABook()
         {
+            if(HttpContext.Session.GetObjectFromJson<User>("newUser") == null)
+            {
+                return Redirect("/");
+            }
             User newUser = HttpContext.Session.GetObjectFromJson<User>("newUser");
             @ViewData["newUser"] = newUser;
             Console.WriteLine("newUser's Username is " + newUser.Username);
