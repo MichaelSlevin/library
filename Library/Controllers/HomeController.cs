@@ -39,7 +39,6 @@ namespace Library.Controllers
             return View();
         }
 
-
         public IActionResult AddUser(string fullName, string username, string email, string phoneNumber, string password)
         {
             Console.WriteLine($"Username is {username}");
@@ -77,8 +76,6 @@ namespace Library.Controllers
             return Redirect("/");
         }
 
-
-
         public IActionResult MyBookshelf()
         {
             if(HttpContext.Session.GetObjectFromJson<User>("newUser") == null)
@@ -108,6 +105,40 @@ namespace Library.Controllers
             _context.Books.Add(new Book { Author = author, Title = title, ISBN = isbn, OwnerId = ownerid, Available = true  });
             _context.SaveChanges();
             return Redirect("/Home/MyBookshelf");
+        }
+
+        public IActionResult FindABook()
+        {
+            if (HttpContext.Session.GetObjectFromJson<User>("newUser") == null)
+            {
+                return Redirect("/");
+            }
+            User newUser = HttpContext.Session.GetObjectFromJson<User>("newUser"); 
+            @ViewData["newUser"] = newUser;
+
+            var bookWithUser = (from book in _context.Books
+                                join user in _context.Users
+                                on book.OwnerId equals user.Id
+                                select new 
+                                {
+                                    Id = book.Id,
+                                    Author = book.Author,
+                                    Title = book.Title,
+                                    Available = book.Available,
+                                    FullName = user.FullName,
+                                    Email = user.Email,
+                                    PhoneNumber = user.PhoneNumber
+                                }).ToList();
+
+            List<BookWithUser> booksWithUser = new List<BookWithUser>();
+
+            foreach (var book in bookWithUser)
+            {
+                booksWithUser.Add(new BookWithUser(book.Id, book.Author, book.Title, book.Available, book.FullName, book.Email, book.PhoneNumber));
+            }
+            BookList bookList = new BookList(_context, booksWithUser);
+
+            return View(bookList);
         }
 
         public IActionResult SignOut()
