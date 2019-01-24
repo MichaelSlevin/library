@@ -107,6 +107,56 @@ namespace Library.Controllers
             return Redirect("/Home/MyBookshelf");
         }
 
+        public IActionResult EditUserDetails()
+        {
+            if (HttpContext.Session.GetObjectFromJson<User>("newUser") == null)
+            {
+                return Redirect("/");
+            }
+            User newUser = HttpContext.Session.GetObjectFromJson<User>("newUser");
+            @ViewData["newUser"] = newUser;
+
+            return View(newUser);
+        }
+        [HttpPost]
+        public IActionResult EditUserDetails(long id, string fullName, string username, string email, string phoneNumber, string password)
+        {
+            if (HttpContext.Session.GetObjectFromJson<User>("newUser") == null)
+            {
+                return Redirect("/");
+            }
+            User newUser = HttpContext.Session.GetObjectFromJson<User>("newUser");
+            @ViewData["newUser"] = newUser;
+
+            newUser = _context.Users.Where(x => x.Id == id).Single();
+            if (fullName != newUser.FullName)
+            {
+                newUser.FullName = fullName;
+            }
+            if (username != newUser.Username)
+            {
+                newUser.Username = username;
+            }
+            if (email != newUser.Email)
+            {
+                newUser.Email = email;
+            }
+            if (phoneNumber != newUser.PhoneNumber)
+            {
+                newUser.PhoneNumber = phoneNumber;
+            }
+            if (password != newUser.Password)
+            {
+                newUser.Password = password;
+            }
+            _context.Users.Update(newUser);
+            _context.SaveChanges();
+
+            HttpContext.Session.SetObjectAsJson("newUser", newUser);
+
+            return Redirect("/Home/MyBookshelf");
+        }
+
         public IActionResult FindABook()
         {
             if (HttpContext.Session.GetObjectFromJson<User>("newUser") == null)

@@ -1,0 +1,26 @@
+﻿@{
+    ViewData["Title"] = "Edit User Details";
+}
+@*Model.Id*@
+
+<h1>Amend your detail </h1>
+
+<form method="post" action="/Home/EditUserDetails">
+    <input type="hidden" name="id" value="@Model.Id" />
+    <p>
+        Full name: <input type="text" name="fullName" value="@Model.FullName"/>
+    </p>
+    <p>
+        Username: <input type="text" name="username" value="@Model.Username" />
+    </p>
+    <p>
+        Email: <input type="text" name="email" value="@Model.Email"/>
+    </p>
+    <p>
+        Phone number: <input type="text" name="phoneNumber" value="@Model.PhoneNumber" />
+    </p>
+    <p>
+        Password: <input type="text" name="password" value="@Model.Password"/>
+    </p>
+    <input type="submit" value="Save Changes">
+</form>
