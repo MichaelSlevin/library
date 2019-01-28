@@ -7,85 +7,182 @@
 <br />
 
 <form action="/Home/AddABook">
-  <input type="submit" value="Add a Book">
+    <input type="submit" class="btn btn-default" value="Add a Book">
 </form>
 
+<br />
+<br />
+<h1 class="text-center">My Books</h1>
 
-<div class="container">
-    <h1 class="text-center">My Books</h1>
+
+
+<section class="bg-grey-50 padding-top-60 padding-top-sm-30">
+    <div class="container">
         <div class="row">
-            <div class="col-lg-6" style="background-color:#94DC89;">
+            <div class="col-md-3 col-sm-4 hidden-xs">
+                <div class="widget">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Available</div>
+                        <div class="panel-body">
+                            @if (@Model.NoAvailableBooks)
+                            {
+                            <p>You currently have 0 available books on your bookshelf</p>
+                            }
+                            else
+                            {
+                            @foreach (var book in @Model.getAvailableBooks())
+                           {
+
+                            <strong> @book.Title</strong>;
+                            <br />
+                            <strong> @book.Author</strong>;
+                            <br />
+                            <br />
+                            <form action="/Home/RemoveBook" method="post">
+                                <input type="hidden" name="userid" value="@Model.UserId">
+                                <input type="hidden" name="id" value="@book.Id">
+                                <input type="submit" class="btn btn-default" value="Delete Book">
+                            </form>
+
+                            <form action="/Home/ChangeAvailability" method="post">
+                                <input type="hidden" name="userid" value="@Model.UserId">
+                                <input type="hidden" name="id" value="@book.Id">
+                                <input type="hidden" name="availability" value="false">
+                                <input type="submit" class="btn btn-default" value="Make unavailable">
+                            </form>
+
+                                }
+                           }
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-4 hidden-xs">
+                <div class="widget">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Unavailable</div>
+                        <div class="panel-body">
+
+                        @if (@Model.NoUnavailableBooks)
+
+                        {
+                        <p>You currently have 0 unavailable books on your bookshelf</p>
+                        }
+                        else
+                        {
+                        @foreach (var book in @Model.getUnavailableBooks())
+                        {
+
+                        <strong>@book.Title</strong>;
+                        <br />
+                        <strong>@book.Author</strong>;
+                        <br />
+                        <br />
+
+                        <form action="/Home/RemoveBook" method="post">
+                            <input type="hidden" name="userid" value="@Model.UserId">
+                            <input type="hidden" name="id" value="@book.Id">
+                            <input type="submit" class="btn btn-default" value="Delete Book">
+                        </form>
+
+                        <form action="/Home/ChangeAvailability" method="post">
+                            <input type="hidden" name="userid" value="@Model.UserId">
+                            <input type="hidden" name="id" value="@book.Id">
+                            <input type="hidden" name="availability" value="true">
+                            <input type="submit" class="btn btn-default" value="Make available">
+                        </form>
+
+                            }
+                        }
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+@*<div class="container">
+    <h1 class="text-center">My Books</h1>
+    <div class="row">
+        <div class="col-lg-6 col-md-6" style="background-color:#94DC89;">
             <h2>Available books</h2>
 
-              <div class="row">
-              
+            <div class="row">
+
+
                 @if (@Model.NoAvailableBooks)
                 {
-                <p>You currently have 0 available books on your bookshelf</p>
+                    <p>You currently have 0 available books on your bookshelf</p>
                 }
                 else
                 {
-                @foreach (var book in @Model.getAvailableBooks())
-                {
-                <p>--------------------------------------------------------------------------------------</p>
-                <strong> @book.Title</strong>;
-                <br />
-                <strong> @book.Author</strong>;
-                <br />
-                <br />
-                <form action="/Home/RemoveBook" method="post">
-                    <input type="hidden" name="userid" value="@Model.UserId">
-                    <input type="hidden" name="id" value="@book.Id">
-                    <input type="submit" value="Delete Book">
-                </form>
-                <form action="/Home/ChangeAvailability" method="post">
-                    <input type="hidden" name="userid" value="@Model.UserId">
-                    <input type="hidden" name="id" value="@book.Id">
-                    <input type="hidden" name="availability" value="false">
-                    <input type="submit" value="Make unavailable">
-                </form>
+                    @foreach (var book in @Model.getAvailableBooks())
+                    {
+                        <p>--------------------------------------------------------------------------------------</p>
+                        <strong> @book.Title</strong>;
+                        <br />
+                        <strong> @book.Author</strong>;
+                        <br />
+                        <br />
+                        <form action="/Home/RemoveBook" method="post">
+                            <input type="hidden" name="userid" value="@Model.UserId">
+                            <input type="hidden" name="id" value="@book.Id">
+                            <input type="submit" class="btn btn-default" value="Delete Book">
+                        </form>
 
-                   }
-                }
-               </div>
+                        <form action="/Home/ChangeAvailability" method="post">
+                            <input type="hidden" name="userid" value="@Model.UserId">
+                            <input type="hidden" name="id" value="@book.Id">
+                            <input type="hidden" name="availability" value="false">
+                            <input type="submit" class="btn btn-default" value="Make unavailable">
+                        </form>
+
+                        }
+                    }
+
             </div>
+        </div>
 
-            <div class="col-sm-6" style="background-color:#F55A5A;">
-               <h2>Unavailable</h2>
+        <div class="col-sm-6 col-md-6" style="background-color:#F55A5A;">
+            <h2>Unavailable</h2>
 
-                @if (@Model.NoUnavailableBooks)
+            @if (@Model.NoUnavailableBooks)
 
-                {
+            {
                 <p>You currently have 0 unavailable books on your bookshelf</p>
-                }
-                else
-                {
+            }
+            else
+            {
                 @foreach (var book in @Model.getUnavailableBooks())
                 {
-                <p>-------------------------------------------------------------------------------------------------</p>
-                <strong>@book.Title</strong>;
-                <br />
-                <strong>@book.Author</strong>;
-                <br />
-                <br />
+                    <p>-------------------------------------------------------------------------------------------------</p>
+                    <strong>@book.Title</strong>;
+                    <br />
+                    <strong>@book.Author</strong>;
+                    <br />
+                    <br />
 
-                <form action="/Home/RemoveBook" method="post">
-                    <input type="hidden" name="userid" value="@Model.UserId">
-                    <input type="hidden" name="id" value="@book.Id">
-                    <input type="submit" value="Delete Book">
-                </form>
+                    <form action="/Home/RemoveBook" method="post">
+                        <input type="hidden" name="userid" value="@Model.UserId">
+                        <input type="hidden" name="id" value="@book.Id">
+                        <input type="submit" class="btn btn-default" value="Delete Book">
+                    </form>
 
-                <form action="/Home/ChangeAvailability" method="post">
-                    <input type="hidden" name="userid" value="@Model.UserId">
-                    <input type="hidden" name="id" value="@book.Id">
-                    <input type="hidden" name="availability" value="true">
-                    <input type="submit" value="Make available">
-                </form>
+                    <form action="/Home/ChangeAvailability" method="post">
+                        <input type="hidden" name="userid" value="@Model.UserId">
+                        <input type="hidden" name="id" value="@book.Id">
+                        <input type="hidden" name="availability" value="true">
+                        <input type="submit" class="btn btn-default" value="Make available">
+                    </form>
 
                 }
             }
         </div>
     </div>
-</div>
+</div>*@
 
 
