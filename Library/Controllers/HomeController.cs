@@ -225,19 +225,6 @@ namespace Library.Controllers
             return Redirect("/Home/MyBookshelf");
         }
 
-        public IActionResult addMultipleBooks1(string ISBNs)
-        {
-          string[] ISBNArray = ISBNs.Split(',');
-          Console.WriteLine(ISBNs);
-          foreach (var ISBN in ISBNArray)
-          {
-              Console.WriteLine("-----------------------------------------------------------");
-
-              Console.WriteLine(ISBN);
-          }
-          return View();
-        }
-
         [HttpPost]
         public IActionResult addMultipleBooks(string ISBNs, string Titles, string Authors)
         {
