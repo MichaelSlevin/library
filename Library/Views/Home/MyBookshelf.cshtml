@@ -33,6 +33,8 @@
                             @foreach (var book in @Model.getAvailableBooks())
                            {
 
+                            <img src="https://books.google.co.uk/books/content?id=GMUJCAAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&imgtk=AFLRE73QePex3ZtFsJNbSqJmMkdpHlEZnsavddTtdu4fENlpN-Qc8e8RIyYkYX56DZUwAsvdCZNQ4hxyZFDfvuOgmRdqzd-zEj0UTNee-bWjzAXW6FqUQu4i-A00YaEImyy7w_b2DWrZ" />
+                            <br />
                             <strong> @book.Title</strong>;
                             <br />
                             <strong> @book.Author</strong>;
@@ -50,6 +52,7 @@
                                 <input type="hidden" name="availability" value="false">
                                 <input type="submit" class="btn btn-default" value="Make unavailable">
                             </form>
+                            <br />
 
                                 }
                            }
@@ -73,7 +76,8 @@
                         {
                         @foreach (var book in @Model.getUnavailableBooks())
                         {
-
+                        <img src="https://books.google.co.uk/books/content?id=yhIRBwAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&imgtk=AFLRE72s9PFdRV16CeSrJqztKaAoiKdY19vZVYCUgWfxFaaeA3OTpUaE4JE2KODCm6SBdxwjauNdAQzPd7onNfz62s9f1IgDTg8QHCM3CItLi8S6FdiyZcLBwy18KioFFSjB34OYgWUv" />
+                        <br />
                         <strong>@book.Title</strong>;
                         <br />
                         <strong>@book.Author</strong>;
@@ -92,7 +96,7 @@
                             <input type="hidden" name="availability" value="true">
                             <input type="submit" class="btn btn-default" value="Make available">
                         </form>
-
+                        <br />
                             }
                         }
 
