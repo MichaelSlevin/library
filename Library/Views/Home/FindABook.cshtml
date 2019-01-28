@@ -1,4 +1,5 @@
-﻿@{
+﻿<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+@{
     ViewData["Title"] = "Find A Book";
 }
  @*Model.Id*@ 
@@ -6,10 +7,29 @@
 
 @foreach (var book in @Model.GetAllBooksWithUser())
 {
+<script>
+        var googleAPI = "https://www.googleapis.com/books/v1/volumes?q="+@book.ISBN;
 
+        $.getJSON(googleAPI, function (response) {
+           var item = response.items[0];
+           var title = item.volumeInfo.title;
+            var author = item.volumeInfo.authors[0];
+           window.image_url = item.volumeInfo.imageLinks.thumbnail;
+           console.log("item.volumeInfo.imageLinks.thumbnail is: " + JSON.stringify(image_url));
+
+           $('#ResultsHolder').append("<div id='scannedBook'><img src='"+window.image_url+"' />" +"</div>");
+        });
+</script>
     <p>------------------------</p>
+
+    <div id="ResultsHolder">
+
+    </div>
+
     <p>Title - @book.Title</p>;
     <p>Author - @book.Author</p>;
+    <p>ISBN - @book.ISBN</p>;
+    
     <br />
 
     @if (book.Available == true)

@@ -12,16 +12,18 @@ namespace Library.Models
         public long Id;
         public string Author;
         public string Title;
+        public string ISBN;
         public bool Available;
         public string FullName;
         public string Email;
         public string PhoneNumber;
 
-        public BookWithUser(long Id, string Author, string Title, bool Available, string FullName, string Email, string PhoneNumber)
+        public BookWithUser(long Id, string Author, string Title, string ISBN, bool Available, string FullName, string Email, string PhoneNumber)
         {
             this.Id = Id;
             this.Author = Author;
             this.Title = Title;
+            this.ISBN = ISBN;
             this.Available = Available;
             this.FullName = FullName;
             this.Email = Email;
