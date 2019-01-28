@@ -1,0 +1,163 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+</head>
+<body>
+  <form action="/Home/addMultipleBooks" method="post">
+    <input id="ISBNs" name="ISBNs" value="ISBNs" type="textarea"></input>
+    <input id="Authors" name="Authors" value="Authors" type="textarea"></input>
+    <input id="Titles" name="Titles" value="Titles" type="textarea"></input>
+
+    <input type="submit">
+  </form>
+  ISBNs:
+  <ul>
+    <div id="ResultsHolder">
+
+    </div>
+  </ul>
+  <div id="Hidden_ISBNs">ISBN</div>
+  <!-- <div id="Hidden_Titles">Title</div>
+  <div id="Hidden_Authors">Author</div> -->
+
+    <p>To enable video, please host the site in https!</p>
+    <div id="divLoading">loading...</div>
+    <div id="divReading" style="display:none">Reading...</div>
+    <button id="btn-startReadVideo" disabled>start read</button>
+    <button id="btn-stopReadVideo" style="display:none">stop read</button>
+    <div id="divVideoContainer" style="max-width:90%;position:relative;">
+        <video id="theVideo" style="width:100%;height:100%;" playsinline="true"></video>
+        <div id="divVideoRegion" style="position:absolute;margin:auto;left:0;top:0;right:0;bottom:0;width:100%;height:100%;border:3px solid #50A8E1;"></div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+
+    <!-- optional, a log tool -->
+    <script src="https://demo.dynamsoft.com/dbr_wasm/js/kConsole.js"></script>
+
+    <!-- https://github.com/webrtc/adapter -->
+    <script src="https://demo.dynamsoft.com/dbr_wasm/js/webrtc-adapter.js"></script>
+
+    <script src="https://demo.dynamsoft.com/dbr_wasm/js/dbr-6.4.1.1.min.js"></script>
+
+    <script>
+        $('#ResultsHolder').append("This is a appendment");
+    // By default, js will load `dbr-<version>.min.js` & `dbr-<version>.wasm` in the same folder as the context.
+        // `dbr-<version>.min.js` & `dbr-<version>.wasm` should always put in same folder.
+        // Modify this setting when you put `dbr-<version>.min.js` & `dbr-<version>.wasm` somewhere else.
+        dynamsoft.dbrEnv.resourcesPath = 'https://demo.dynamsoft.com/dbr_wasm/js';
+
+        //https://www.dynamsoft.com/CustomerPortal/Portal/TrialLicense.aspx
+        dynamsoft.dbrEnv.licenseKey = "t0068NQAAACbrVg4UmesjQy48OXzmObj7NAzryKUSoC2dFmZFam4JTm8mgf28/rGBr5cdJYJBbPRCYLX+hfTUp8bGvAV6pbk=";
+
+        dynamsoft.dbrEnv.bUseWorker = true; //uncomment it to use worker
+
+        dynamsoft.dbrEnv.onAutoLoadWasmSuccess = function(){
+            playvideo();
+            $('#divLoading').text('load dbr worker success');
+        };
+        dynamsoft.dbrEnv.onAutoLoadWasmError = function(ex){
+            kConsoleLog(ex);
+            $('#divLoading').text('load dbr worker fail: '+(ex.message || ex));
+        };
+
+        var playvideo = ()=>{
+            kConsoleLog('======before video========');
+            navigator.mediaDevices.getUserMedia({ video: { width: { ideal: 1280 }, height: { ideal: 720 }, facingMode: { ideal: 'environment' } } }).then((stream)=>{
+                kConsoleLog('======get video========');
+                var video = $('#theVideo')[0];
+                video.srcObject = stream;
+                video.onloadedmetadata = ()=>{
+                    kConsoleLog('======play video========');
+                    video.play();
+                    kConsoleLog('======played video========');
+
+                    $('#btn-startReadVideo').removeAttr('disabled');
+                };
+            }).catch((ex)=>{
+                kConsoleLog(ex);
+                alert("Please make sure the camera is connected and the site is deployed in https: "+(ex.message || ex));
+            });
+        };
+
+        $('#btn-startReadVideo').click(()=>{
+            $('#divReading').show();
+            $('#btn-startReadVideo').hide();
+            $('#btn-stopReadVideo').show();
+            isLooping = true;
+            $('#kConsoleShowHideBtn').click();
+            loopReadVideo();
+        });
+        $('#btn-stopReadVideo').click(()=>{
+            $('#btn-stopReadVideo').hide();
+            $('#btn-startReadVideo').show();
+            isLooping = false;
+            $('#divReading').hide();
+        });
+
+
+            var ISBNs = ["123456", "1234"];
+            ISBNs.push("123456789");
+
+        var isLooping = false;
+
+        var loopReadVideo = function(){
+            if(!isLooping){
+                return;
+            }
+            //kConsoleLog('======= once read =======')
+            var timestart = (new Date()).getTime();
+
+            var ISBNs = ["9781781251492"];
+
+            var reader = new dynamsoft.BarcodeReader();
+            reader.decodeFileInMemory($('#theVideo')[0]).then(results=>{
+                //kConsoleLog('time cost: ' + ((new Date()).getTime() - timestart) + 'ms');
+                for(var i=0;i<results.length;++i){
+                    var result = results[i];
+                    if (!$('#Hidden_ISBNs').text().includes(result.BarcodeText))
+                    {
+                      kConsoleLog("ISBN found and added to array!");
+                      kConsoleLog(result.BarcodeText);
+                      $('#Hidden_ISBNs').append(","+result.BarcodeText);
+
+                      var googleAPI = "https://www.googleapis.com/books/v1/volumes?q="+result.BarcodeText;
+                      $()
+
+                      $.getJSON(googleAPI, function (response) {
+                          console.log("JSON Data: " + response.items);
+                          // for (var i = 0; i < response.items.length; i++) {
+                              var item = response.items[0];
+                              var title = item.volumeInfo.title;
+                              var author = item.volumeInfo.authors[0];
+                              var image_url = item.volumeInfo.imageLinks.thumbnail;
+                              // in production code, item.text should have the HTML entities escaped.
+                              // document.getElementById("content").innerHTML += "<br>" + item.volumeInfo.title;
+                              $('input[name="Authors"]').val($('input[name="Authors"]').val()+","+author);
+                              $('input[name="Titles"]').val($('input[name="Titles"]').val()+","+title);
+                              $('#ResultsHolder').append("<div id='scannedBook'><img src='"+image_url+"' />" + title + " by "+  result.BarcodeText +"</div>")
+                              //<img src='http://covers.openlibrary.org/b/isbn/"+result.BarcodeText+"-M.jpg' />
+                            // }
+                      });
+
+
+                      $('input[name="ISBNs"]').val($('input[name="ISBNs"]').val()+","+result.BarcodeText);
+
+                      }
+                }
+                setTimeout(loopReadVideo, 0);
+                return reader.deleteInstance();
+            }).catch(ex=>{
+                kConsoleError(ex.message || ex);
+                setTimeout(loopReadVideo, 0);
+                reader.deleteInstance();
+            });
+
+        };
+
+
+    </script>
+</body>
+</html>

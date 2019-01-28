@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Library.Models;
+using Aspose.BarCode.BarCodeRecognition;
+using IronBarCode;
+using System.Drawing;
 
 namespace Library.Controllers
 {
@@ -32,6 +35,17 @@ namespace Library.Controllers
               return Redirect("/Home/MyBookshelf");
             }
 
+        }
+
+        public IActionResult AddBooks()
+        {
+            if(HttpContext.Session.GetObjectFromJson<User>("newUser") == null)
+            {
+                return Redirect("/");
+            }
+            Console.WriteLine("In the barcode reader clas..................---------------------");
+
+            return  View();
         }
 
         public IActionResult Register()
@@ -163,13 +177,13 @@ namespace Library.Controllers
             {
                 return Redirect("/");
             }
-            User newUser = HttpContext.Session.GetObjectFromJson<User>("newUser"); 
+            User newUser = HttpContext.Session.GetObjectFromJson<User>("newUser");
             @ViewData["newUser"] = newUser;
 
             var bookWithUser = (from book in _context.Books
                                 join user in _context.Users
                                 on book.OwnerId equals user.Id
-                                select new 
+                                select new
                                 {
                                     Id = book.Id,
                                     Author = book.Author,
@@ -214,6 +228,42 @@ namespace Library.Controllers
             return Redirect("/Home/MyBookshelf");
         }
 
+        public IActionResult addMultipleBooks1(string ISBNs)
+        {
+          string[] ISBNArray = ISBNs.Split(',');
+          Console.WriteLine(ISBNs);
+          foreach (var ISBN in ISBNArray)
+          {
+              Console.WriteLine("-----------------------------------------------------------");
+
+              Console.WriteLine(ISBN);
+          }
+          return View();
+        }
+
+        [HttpPost]
+        public IActionResult addMultipleBooks(string ISBNs, string Titles, string Authors)
+        {
+          // User newUser = HttpContext.Session.GetObjectFromJson<User>("newUser");
+          long UserId = HttpContext.Session.GetObjectFromJson<User>("newUser").Id;
+          Console.WriteLine("made it into add multiple Books post route");
+          string[] ISBNArray = ISBNs.Split(',');
+          string[] AuthorArray = Authors.Split(',');
+          string[] TitleArray = Titles.Split(',');
+          Console.WriteLine(ISBNs);
+
+          for (var i = 1; i < ISBNArray.Length; i++)
+          {
+              Console.WriteLine("-----------------------------------------------------------");
+              Console.WriteLine(TitleArray[i]);
+              Console.WriteLine(AuthorArray[i]);
+              Console.WriteLine(ISBNArray[i]);
+               _context.Books.Add(new Book { Author = AuthorArray[i], Title = TitleArray[i], ISBN = ISBNArray[i], OwnerId = UserId, Available = true  });
+          }
+          _context.SaveChanges();
+          return Redirect("/Home/MyBookshelf");
+          // return Redirect("/");
+        }
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
