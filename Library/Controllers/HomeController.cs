@@ -7,9 +7,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Library.Models;
-using Aspose.BarCode.BarCodeRecognition;
-using IronBarCode;
-using System.Drawing;
 
 namespace Library.Controllers
 {
