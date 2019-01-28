@@ -6,9 +6,9 @@
 </head>
 <body>
   <form action="/Home/addMultipleBooks" method="post">
-    <input id="ISBNs" name="ISBNs" value="ISBNs" type="textarea"></input>
-    <input id="Authors" name="Authors" value="Authors" type="textarea"></input>
-    <input id="Titles" name="Titles" value="Titles" type="textarea"></input>
+    <input id="ISBNs" name="ISBNs" value="ISBNs" type="hidden"></input>
+    <input id="Authors" name="Authors" value="Authors" type="hidden"></input>
+    <input id="Titles" name="Titles" value="Titles" type="hidden"></input>
 
     <input type="submit">
   </form>
@@ -18,9 +18,7 @@
 
     </div>
   </ul>
-  <div id="Hidden_ISBNs">ISBN</div>
-  <!-- <div id="Hidden_Titles">Title</div>
-  <div id="Hidden_Authors">Author</div> -->
+  <div id="Hidden_ISBNs" style="display: none">ISBN</div>
 
     <p>To enable video, please host the site in https!</p>
     <div id="divLoading">loading...</div>
