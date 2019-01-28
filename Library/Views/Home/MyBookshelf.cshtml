@@ -4,6 +4,7 @@
 }
 @* Model.UserId *@
 
+<br />
 
 <form action="/Home/AddABook">
   <input type="submit" value="Add a Book">
@@ -17,7 +18,7 @@ else
 {
   @foreach (var book in @Model.getAvailableBooks())
   {
-      <p>New book - styling must be added</p>
+      <p>--------</p>
       @book.Title;
       <br />
       @book.Author;
@@ -47,7 +48,7 @@ else
 {
   @foreach (var book in @Model.getUnavailableBooks())
   {
-      <p>New book - styling must be added</p>
+      <p>New book</p>
       @book.Title;
       <br />
       @book.Author;

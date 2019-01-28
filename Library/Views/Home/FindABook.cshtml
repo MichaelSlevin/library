@@ -2,15 +2,14 @@
     ViewData["Title"] = "Find A Book";
 }
  @*Model.Id*@ 
-
+<h1>All Books</h1>
 
 @foreach (var book in @Model.GetAllBooksWithUser())
 {
 
-    <p>New book - styling must be added</p>
-    @book.Title;
-    <br />
-    @book.Author;
+    <p>------------------------</p>
+    <p>Title - @book.Title</p>;
+    <p>Author - @book.Author</p>;
     <br />
 
     @if (book.Available == true)
