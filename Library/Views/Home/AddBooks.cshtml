@@ -135,7 +135,7 @@
                               // document.getElementById("content").innerHTML += "<br>" + item.volumeInfo.title;
                               $('input[name="Authors"]').val($('input[name="Authors"]').val()+","+author);
                               $('input[name="Titles"]').val($('input[name="Titles"]').val()+","+title);
-                              $('#ResultsHolder').append("<div id='scannedBook'><img src='"+image_url+"' />" + title + " by "+  result.BarcodeText +"</div>")
+                              $('#ResultsHolder').append("<div id='scannedBook'><img src='"+image_url+"' />" + title + " by "+  author +"</div>")
                               //<img src='http://covers.openlibrary.org/b/isbn/"+result.BarcodeText+"-M.jpg' />
                             // }
                       });
