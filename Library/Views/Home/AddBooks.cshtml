@@ -1,0 +1,194 @@
+
+@{
+    ViewData["Title"] = "Add Books";
+}
+
+<div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="10000000">
+        <ol class="carousel-indicators">
+            <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+            <li data-target="#myCarousel" data-slide-to="1"></li>
+        </ol>
+        <div class="carousel-inner" role="listbox">
+
+            <div class="item active" style="background-color: #92C6E7; height: 350px; width: 100%;">
+
+                <div class="carousel-caption" role="option" id="scanned_books_1">
+                <h1>Click start read to begin scanning your books! Hold up the barcode to your camera, and click stop read and submit when you're finished!</h1>
+                </div>
+            </div>
+            <div class="item" style="background-color: #92C6E7; height: 350px; width: 100%;">
+
+                <div class="carousel-caption" role="option" id="scanned_books_2">
+                </div>
+            </div>
+
+
+        </div>
+        <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+            <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+            <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
+    </div>
+
+
+  <form action="/Home/addMultipleBooks" method="post">
+    <input id="ISBNs" name="ISBNs" value="ISBNs" type="hidden"></input>
+    <input id="Authors" name="Authors" value="Authors" type="hidden"></input>
+    <input id="Titles" name="Titles" value="Titles" type="hidden"></input>
+    <input type="submit">
+  </form>
+
+  <ul>
+    <div id="ResultsHolder">
+
+    </div>
+  </ul>
+
+  <div id="Hidden_ISBNs" style="display: none">ISBN</div>
+
+    <p>To enable video, please host the site in https!</p>
+    <div id="divLoading">loading...</div>
+    <div id="divReading" style="display:none">Reading...</div>
+    <button id="btn-startReadVideo" disabled>start read</button>
+    <button id="btn-stopReadVideo" style="display:none">stop read</button>
+    <div id="divVideoContainer" style="max-width:90%;position:relative;">
+        <video id="theVideo" style="width:100%;height:100%;" playsinline="true"></video>
+        <div id="divVideoRegion" style="position:absolute;margin:auto;left:0;top:0;right:0;bottom:0;width:100%;height:100%;border:3px solid #50A8E1;"></div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+
+    <!-- optional, a log tool -->
+    <script src="https://demo.dynamsoft.com/dbr_wasm/js/kConsole.js"></script>
+
+    <!-- https://github.com/webrtc/adapter -->
+    <script src="https://demo.dynamsoft.com/dbr_wasm/js/webrtc-adapter.js"></script>
+
+    <script src="https://demo.dynamsoft.com/dbr_wasm/js/dbr-6.4.1.1.min.js"></script>
+
+    <script>
+        $('#ResultsHolder').append("This is a appendment");
+    // By default, js will load `dbr-<version>.min.js` & `dbr-<version>.wasm` in the same folder as the context.
+        // `dbr-<version>.min.js` & `dbr-<version>.wasm` should always put in same folder.
+        // Modify this setting when you put `dbr-<version>.min.js` & `dbr-<version>.wasm` somewhere else.
+        dynamsoft.dbrEnv.resourcesPath = 'https://demo.dynamsoft.com/dbr_wasm/js';
+
+        //https://www.dynamsoft.com/CustomerPortal/Portal/TrialLicense.aspx
+        dynamsoft.dbrEnv.licenseKey = "t0068NQAAACbrVg4UmesjQy48OXzmObj7NAzryKUSoC2dFmZFam4JTm8mgf28/rGBr5cdJYJBbPRCYLX+hfTUp8bGvAV6pbk=";
+
+        dynamsoft.dbrEnv.bUseWorker = true; //uncomment it to use worker
+
+        dynamsoft.dbrEnv.onAutoLoadWasmSuccess = function(){
+            playvideo();
+            $('#divLoading').text('load dbr worker success');
+        };
+        dynamsoft.dbrEnv.onAutoLoadWasmError = function(ex){
+            kConsoleLog(ex);
+            $('#divLoading').text('load dbr worker fail: '+(ex.message || ex));
+        };
+
+        var playvideo = ()=>{
+            kConsoleLog('======before video========');
+            navigator.mediaDevices.getUserMedia({ video: { width: { ideal: 1280 }, height: { ideal: 720 }, facingMode: { ideal: 'environment' } } }).then((stream)=>{
+                kConsoleLog('======get video========');
+                var video = $('#theVideo')[0];
+                video.srcObject = stream;
+                video.onloadedmetadata = ()=>{
+                    kConsoleLog('======play video========');
+                    video.play();
+                    kConsoleLog('======played video========');
+
+                    $('#btn-startReadVideo').removeAttr('disabled');
+                };
+            }).catch((ex)=>{
+                kConsoleLog(ex);
+                alert("Please make sure the camera is connected and the site is deployed in https: "+(ex.message || ex));
+            });
+        };
+
+        $('#btn-startReadVideo').click(()=>{
+            $('#divReading').show();
+            $('#btn-startReadVideo').hide();
+            $('#btn-stopReadVideo').show();
+            isLooping = true;
+            $('#kConsoleShowHideBtn').click();
+            loopReadVideo();
+        });
+        $('#btn-stopReadVideo').click(()=>{
+            $('#btn-stopReadVideo').hide();
+            $('#btn-startReadVideo').show();
+            isLooping = false;
+            $('#divReading').hide();
+        });
+
+
+            var ISBNs = ["123456", "1234"];
+            ISBNs.push("123456789");
+
+        var isLooping = false;
+        //var num_of_scanned_books = 0;
+
+        var loopReadVideo = function(){
+            if(!isLooping){
+                return;
+            }
+            //kConsoleLog('======= once read =======')
+            var timestart = (new Date()).getTime();
+
+            var ISBNs = ["9781781251492"];
+            var num_of_scanned_books = 0;
+
+            var reader = new dynamsoft.BarcodeReader();
+            reader.decodeFileInMemory($('#theVideo')[0]).then(results=>{
+                //kConsoleLog('time cost: ' + ((new Date()).getTime() - timestart) + 'ms');
+                for(var i=0;i<results.length;++i){
+                    var result = results[i];
+                    if (!$('#Hidden_ISBNs').text().includes(result.BarcodeText) && result.BarcodeText.length > 9)
+                    {
+                      kConsoleLog("ISBN found and added to array!");
+                      kConsoleLog(result.BarcodeText);
+                      $('#Hidden_ISBNs').append(","+result.BarcodeText);
+
+                      var googleAPI = "https://www.googleapis.com/books/v1/volumes?q="+result.BarcodeText;
+
+                      $.getJSON(googleAPI, function (response) {
+                          console.log("JSON Data: " + response.items);
+                          var contents = $('#scanned_books_1').html();
+                          var count = (contents.match(/<img/g) || []).length + 1;
+                          console.log(count);
+                          num_of_scanned_books=count;
+                          var slide_num = Math.floor(num_of_scanned_books/6) + 1;
+                          var item = response.items[0];
+                          var title = item.volumeInfo.title;
+                          var author = item.volumeInfo.authors[0];
+                          var image_url = item.volumeInfo.imageLinks.thumbnail;
+                          $('input[name="Authors"]').val($('input[name="Authors"]').val()+","+author);
+                          $('input[name="Titles"]').val($('input[name="Titles"]').val()+","+title);
+                          if (count == 1)
+                          {
+                            $('#scanned_books_'+slide_num).html('');
+                          }
+                          $('#scanned_books_'+slide_num).append("<img src='"+image_url+"' style='display:inline-block; '/>    ");
+                      });
+
+
+                      $('input[name="ISBNs"]').val($('input[name="ISBNs"]').val()+","+result.BarcodeText);
+
+                      }
+                }
+                setTimeout(loopReadVideo, 0);
+                return reader.deleteInstance();
+            }).catch(ex=>{
+                kConsoleError(ex.message || ex);
+                setTimeout(loopReadVideo, 0);
+                reader.deleteInstance();
+            });
+
+        };
+
+
+    </script>
