@@ -34,6 +34,17 @@ namespace Library.Controllers
 
         }
 
+        public IActionResult AddBooks()
+        {
+            if(HttpContext.Session.GetObjectFromJson<User>("newUser") == null)
+            {
+                return Redirect("/");
+            }
+            Console.WriteLine("In the barcode reader clas..................---------------------");
+
+            return  View();
+        }
+
         public IActionResult Register()
         {
             return View();
@@ -163,7 +174,7 @@ namespace Library.Controllers
             {
                 return Redirect("/");
             }
-            User newUser = HttpContext.Session.GetObjectFromJson<User>("newUser"); 
+            User newUser = HttpContext.Session.GetObjectFromJson<User>("newUser");
             @ViewData["newUser"] = newUser;
 
             var bookWithUser = (from book in _context.Books
@@ -215,6 +226,29 @@ namespace Library.Controllers
             return Redirect("/Home/MyBookshelf");
         }
 
+        [HttpPost]
+        public IActionResult addMultipleBooks(string ISBNs, string Titles, string Authors)
+        {
+          // User newUser = HttpContext.Session.GetObjectFromJson<User>("newUser");
+          long UserId = HttpContext.Session.GetObjectFromJson<User>("newUser").Id;
+          Console.WriteLine("made it into add multiple Books post route");
+          string[] ISBNArray = ISBNs.Split(',');
+          string[] AuthorArray = Authors.Split(',');
+          string[] TitleArray = Titles.Split(',');
+          Console.WriteLine(ISBNs);
+
+          for (var i = 1; i < ISBNArray.Length; i++)
+          {
+              Console.WriteLine("-----------------------------------------------------------");
+              Console.WriteLine(TitleArray[i]);
+              Console.WriteLine(AuthorArray[i]);
+              Console.WriteLine(ISBNArray[i]);
+               _context.Books.Add(new Book { Author = AuthorArray[i], Title = TitleArray[i], ISBN = ISBNArray[i], OwnerId = UserId, Available = true  });
+          }
+          _context.SaveChanges();
+          return Redirect("/Home/MyBookshelf");
+          // return Redirect("/");
+        }
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
