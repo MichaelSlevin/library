@@ -25,4 +25,7 @@
   <ItemGroup>
     <Compile Remove="Tests\Bookshelf.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <None Remove="Views\Home\GoogleApiPageHelper.js" />
+  </ItemGroup>
 </Project>
