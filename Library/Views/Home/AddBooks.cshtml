@@ -13,6 +13,7 @@
             <div class="item active" style="background-color: #92C6E7; height: 350px; width: 100%;">
 
                 <div class="carousel-caption" role="option" id="scanned_books_1">
+                <h1>Click start read to begin scanning your books! Hold up the barcode to your camera, and click stop read and submit when you're finished!</h1>
                 </div>
             </div>
             <div class="item" style="background-color: #92C6E7; height: 350px; width: 100%;">
@@ -167,6 +168,10 @@
                           var image_url = item.volumeInfo.imageLinks.thumbnail;
                           $('input[name="Authors"]').val($('input[name="Authors"]').val()+","+author);
                           $('input[name="Titles"]').val($('input[name="Titles"]').val()+","+title);
+                          if (count == 1)
+                          {
+                            $('#scanned_books_'+slide_num).html('');
+                          }
                           $('#scanned_books_'+slide_num).append("<img src='"+image_url+"' style='display:inline-block; '/>    ");
                       });
 
