@@ -146,39 +146,28 @@
                 //kConsoleLog('time cost: ' + ((new Date()).getTime() - timestart) + 'ms');
                 for(var i=0;i<results.length;++i){
                     var result = results[i];
-                    if (!$('#Hidden_ISBNs').text().includes(result.BarcodeText))
+                    if (!$('#Hidden_ISBNs').text().includes(result.BarcodeText) && result.BarcodeText.length > 9)
                     {
                       kConsoleLog("ISBN found and added to array!");
                       kConsoleLog(result.BarcodeText);
                       $('#Hidden_ISBNs').append(","+result.BarcodeText);
 
                       var googleAPI = "https://www.googleapis.com/books/v1/volumes?q="+result.BarcodeText;
-                      $()
 
                       $.getJSON(googleAPI, function (response) {
                           console.log("JSON Data: " + response.items);
-                          // for (var i = 0; i < response.items.length; i++) {
-                              var contents = $('#scanned_books_1').html();
-                              var count = (contents.match(/<img/g) || []).length;
-                              console.log(count);
-                              num_of_scanned_books=count;
-                              kConsoleLog(num_of_scanned_books);
-                              var slide_num = Math.floor(num_of_scanned_books/5) + 1;
-                              kConsoleLog(slide_num)
-                              //var slide_num = 1;
-                              var item = response.items[0];
-                              var title = item.volumeInfo.title;
-                              var author = item.volumeInfo.authors[0];
-                              var image_url = item.volumeInfo.imageLinks.thumbnail;
-                              // in production code, item.text should have the HTML entities escaped.
-                              // document.getElementById("content").innerHTML += "<br>" + item.volumeInfo.title;
-                              $('input[name="Authors"]').val($('input[name="Authors"]').val()+","+author);
-                              $('input[name="Titles"]').val($('input[name="Titles"]').val()+","+title);
-                              //$('#ResultsHolder').append("<div id='scannedBook'><img src='"+image_url+"' />" + title + " by "+  author +"</div>")
-                              $('#scanned_books_'+slide_num).append("<img src='"+image_url+"' style='display:inline-block; '/>    ");
-                              kConsoleLog('#scanned_books_'+slide_num)
-                              //<img src='http://covers.openlibrary.org/b/isbn/"+result.BarcodeText+"-M.jpg' />
-                            // }
+                          var contents = $('#scanned_books_1').html();
+                          var count = (contents.match(/<img/g) || []).length + 1;
+                          console.log(count);
+                          num_of_scanned_books=count;
+                          var slide_num = Math.floor(num_of_scanned_books/6) + 1;
+                          var item = response.items[0];
+                          var title = item.volumeInfo.title;
+                          var author = item.volumeInfo.authors[0];
+                          var image_url = item.volumeInfo.imageLinks.thumbnail;
+                          $('input[name="Authors"]').val($('input[name="Authors"]').val()+","+author);
+                          $('input[name="Titles"]').val($('input[name="Titles"]').val()+","+title);
+                          $('#scanned_books_'+slide_num).append("<img src='"+image_url+"' style='display:inline-block; '/>    ");
                       });
 
 
