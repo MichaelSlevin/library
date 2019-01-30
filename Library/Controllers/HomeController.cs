@@ -185,6 +185,7 @@ namespace Library.Controllers
                                     Id = book.Id,
                                     Author = book.Author,
                                     Title = book.Title,
+                                    ISBN = book.ISBN,
                                     Available = book.Available,
                                     FullName = user.FullName,
                                     Email = user.Email,
@@ -195,7 +196,7 @@ namespace Library.Controllers
 
             foreach (var book in bookWithUser)
             {
-                booksWithUser.Add(new BookWithUser(book.Id, book.Author, book.Title, book.Available, book.FullName, book.Email, book.PhoneNumber));
+                booksWithUser.Add(new BookWithUser(book.Id, book.Author, book.Title, book.ISBN, book.Available, book.FullName, book.Email, book.PhoneNumber));
             }
             BookList bookList = new BookList(_context, booksWithUser);
 

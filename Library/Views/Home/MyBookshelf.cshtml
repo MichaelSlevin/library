@@ -1,3 +1,4 @@
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
 @{
     ViewData["Title"] = "My Bookshelf";
@@ -5,68 +6,120 @@
 @* Model.UserId *@
 
 <br />
+<p>
+</p>
 
 <form action="/Home/AddABook">
-  <input type="submit" value="Add a Book">
+    <input type="submit" value="Add a Book">
 </form>
+
 <h1>Available books</h1>
+
 @if (@Model.NoAvailableBooks)
 {
-  <p>You currently have 0 available books on your bookshelf</p>
+    <p>You currently have 0 available books on your bookshelf</p>
 }
 else
 {
-  @foreach (var book in @Model.getAvailableBooks())
-  {
-      <p>--------</p>
-      @book.Title;
-      <br />
-      @book.Author;
-      <br />
-      <form action="/Home/RemoveBook" method="post">
-      <input type="hidden" name="userid" value="@Model.UserId">
-      <input type="hidden" name="id" value="@book.Id">
-      <input type="submit" value="Delete Book">
-      </form>
-      <form action="/Home/ChangeAvailability" method="post">
-      <input type="hidden" name="userid" value="@Model.UserId">
-      <input type="hidden" name="id" value="@book.Id">
-      <input type="hidden" name="availability" value="false">
-      <input type="submit" value="Make unavailable">
-      </form>
+    @foreach (var book in @Model.getAvailableBooks())
+    {
+        <script>
+    var googleAPI = "https://www.googleapis.com/books/v1/volumes?q="+@book.ISBN;
 
-      <br />
-  }
+    $.getJSON(googleAPI, function (response) {
+       var item = response.items[0];
+       var infoLink = item.volumeInfo.infoLink;
+       var image_url = item.volumeInfo.imageLinks.thumbnail;
+
+       console.log("item.volumeInfo.infoLink is: " + JSON.stringify(infoLink));
+
+       $('#ResultsHolder_@book.ISBN').append("<div id='scannedBook'><img src='"+image_url+"' />" +"</div>");
+       $('#MoreInfoHolder_@book.ISBN').append("<div id='scannedBook'><a href='"+infoLink+"'>More Info</a></div>");
+    });
+        </script>
+
+        <p>--------</p>
+        <div id="ResultsHolder_@book.ISBN">
+        </div>
+
+        @book.Title;
+        <br />
+        @book.Author;
+        <br />
+        @book.ISBN;
+        <br />
+
+        <div id="MoreInfoHolder_@book.ISBN">
+        </div>
+
+        <form action="/Home/RemoveBook" method="post">
+            <input type="hidden" name="userid" value="@Model.UserId">
+            <input type="hidden" name="id" value="@book.Id">
+            <input type="submit" value="Delete Book">
+        </form>
+        <form action="/Home/ChangeAvailability" method="post">
+            <input type="hidden" name="userid" value="@Model.UserId">
+            <input type="hidden" name="id" value="@book.Id">
+            <input type="hidden" name="availability" value="false">
+            <input type="submit" value="Make unavailable">
+        </form>
+
+        <br />
+    }
 }
 
 <h1>Unavailable books</h1>
 @if (@Model.NoUnavailableBooks)
 {
-  <p>You currently have 0 unavailable books on your bookshelf</p>
+    <p>You currently have 0 unavailable books on your bookshelf</p>
 }
 else
 {
-  @foreach (var book in @Model.getUnavailableBooks())
-  {
-      <p>New book</p>
-      @book.Title;
-      <br />
-      @book.Author;
+    @foreach (var book in @Model.getUnavailableBooks())
+    {
+    <script>
+    googleAPI = "https://www.googleapis.com/books/v1/volumes?q=" + @book.ISBN;
 
-      <form action="/Home/RemoveBook" method="post">
-        <input type="hidden" name="userid" value="@Model.UserId">
-        <input type="hidden" name="id" value="@book.Id">
-        <input type="submit" value="Delete Book">
-      </form>
+    $.getJSON(googleAPI, function (response) {
+       var item = response.items[0];
+       var infoLink = item.volumeInfo.infoLink;
+       var image_url = item.volumeInfo.imageLinks.thumbnail;
 
-      <form action="/Home/ChangeAvailability" method="post">
-        <input type="hidden" name="userid" value="@Model.UserId">
-        <input type="hidden" name="id" value="@book.Id">
-        <input type="hidden" name="availability" value="true">
-        <input type="submit" value="Make available">
-      </form>
+       console.log("item.volumeInfo.infoLink is: " + JSON.stringify(infoLink));
 
-      <br />
-  }
+       $('#ResultsHolder_@book.ISBN').append("<div id='scannedBook'><img src='"+image_url+"' />" +"</div>");
+       $('#MoreInfoHolder_@book.ISBN').append("<div id='scannedBook'><a href='"+infoLink+"'>More Info</a></div>");
+    });
+    </script> 
+
+        <p></p>
+        <div id="ResultsHolder_@book.ISBN">
+        </div>
+
+        @book.Title;
+        <br />
+        @book.Author;
+        <br />
+        @book.ISBN;
+        <br />
+
+        <div id="MoreInfoHolder_@book.ISBN">
+        </div>
+
+        <form action="/Home/RemoveBook" method="post">
+            <input type="hidden" name="userid" value="@Model.UserId">
+            <input type="hidden" name="id" value="@book.Id">
+            <input type="submit" value="Delete Book">
+        </form>
+
+        <form action="/Home/ChangeAvailability" method="post">
+            <input type="hidden" name="userid" value="@Model.UserId">
+            <input type="hidden" name="id" value="@book.Id">
+            <input type="hidden" name="availability" value="true">
+            <input type="submit" value="Make available">
+        </form>
+
+        <br />
+    }
 }
 

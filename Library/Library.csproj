@@ -34,4 +34,7 @@
   <ItemGroup>
     <None Include="wwwroot\images\photo.jpg" />
   </ItemGroup>
+  <ItemGroup>
+    <None Remove="Views\Home\GoogleApiPageHelper.js" />
+  </ItemGroup>
 </Project>
