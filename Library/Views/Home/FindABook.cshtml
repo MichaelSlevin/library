@@ -2,13 +2,45 @@
 @{
     ViewData["Title"] = "Find A Book";
 }
-@*Model.Id*@
-<h1>All Books</h1>
+<br />
+<br />
+
+<div id="main">
+    @*<div class="row" id="row_1">
+            <div class="col-md-4" id="cell_1"></div>
+            <div class="col-md-4" id="cell_2"></div>
+            <div class="col-md-4" id="cell_3"></div>
+        </div>
+        <div class="row" id="row_2">
+            <div class="col-md-4" id="cell_4"></div>
+            <div class="col-md-4" id="cell_5"></div>
+            <div class="col-md-4" id="cell_6"></div>
+        </div>*@
+</div>
+@{
+    var i = 0;
+    var rowNumber = 0;
+}
 
 @foreach (var book in @Model.GetAllBooksWithUser())
 {
-<script>
-    var googleAPI = "https://www.googleapis.com/books/v1/volumes?q="+@book.ISBN;
+
+    i = i + 1;
+    rowNumber = ((i - 1) / 3) + 1;
+
+
+
+    @if (i % 3 == 1)
+    {
+        <script> $('#main').append('<div class="row" id="row_@rowNumber"></div>');</script>
+
+    }
+
+        <script>
+    $('#row_@rowNumber').append('<div class="col-md-4" id="cell_@i">');
+     $('#row_@rowNumber').append('</div>');
+
+            var googleAPI = "https://www.googleapis.com/books/v1/volumes?q="+@book.ISBN;
 
     $.getJSON(googleAPI, function (response) {
        var item = response.items[0];
@@ -17,35 +49,39 @@
 
        console.log("item.volumeInfo.infoLink is: " + JSON.stringify(infoLink));
 
-       $('#ResultsHolder_@book.ISBN').append("<div id='scannedBook'><img src='"+image_url+"' />" +"</div>");
-       $('#MoreInfoHolder_@book.ISBN').append("<div id='scannedBook'><a href='"+infoLink+"'>More Info</a></div>");
+       $('#cell_@i').append("<img src='"+image_url+"' />");
     });
-</script>
-    <p>------------------------</p>
 
-    <div id="ResultsHolder_@book.ISBN">
-    </div>
+    @*$('#cell_@rowNumber').append("@book.ISBN");*@
+    $('#cell_@i').append("Title - <b>@book.Title</strong></b></p>");
+    $('#cell_@i').append("Author - <b>@book.Author</b></p>");
+    $('#cell_@i').append("ISBN - @book.ISBN</p>");
 
-    <p>Title - @book.Title</p>;
-    <p>Author - @book.Author</p>;
-    <p>ISBN - @book.ISBN</p>;
 
-    <div id="MoreInfoHolder_@book.ISBN">
-    </div>
 
-    <br />
+
+
+        </script>
+
 
     @if (book.Available == true)
     {
-        <select>
-            <option value="Request">Request</option>
-            <option value="Name">Name: @book.FullName</option>
-            <option value="Email">Email: @book.Email</option>
-            <option value="Phone Number">Phone: @book.PhoneNumber</option>
-        </select>
+    <script>$('#cell_@i').append("<p><a href='mailto:@book.Email'>Request the book</a></p>");</script>
+@*<script>$('#cell_@i').append("<select><option value="Request">Request</option></select>");</script>*@
+@*<script>$('#cell_@i').append("");</script>
+    <script>$('#cell_@i').append("<option value="Name">Name: @book.FullName</option>");</script>
+    <script>$('#cell_@i').append("<option value="Email">Email: @book.Email</option>");</script>
+    <script>$('#cell_@i').append("<option value="Phone Number">Phone: @book.PhoneNumber</option>");</script>
+    <script>$('#cell_@i').append("</select>");</script>*@
     }
-    else
-    {
-        <p>NOT AVAILABLE</p>
-    }
+else
+{
+
+<script>$('#cell_@i').append('<p>NOT AVAILABLE </ p >')</script>
+}
+
+
+
+
+
 }
