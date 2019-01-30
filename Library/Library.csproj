@@ -30,6 +30,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Remove="wwwroot\images\photo.jpg" />
+    <Content Remove="wwwroot\logo %281%29.ico" />
+    <Content Remove="wwwroot\favicon 14.16.07.ico" />
+    <Content Remove="wwwroot\favicon.ico" />
   </ItemGroup>
   <ItemGroup>
     <None Include="wwwroot\images\photo.jpg" />
