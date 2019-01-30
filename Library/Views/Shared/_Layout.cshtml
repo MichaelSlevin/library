@@ -4,7 +4,7 @@
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-        <title>@ViewData["Title"] - Library</title>
+        <title>@ViewData["Title"] - For Books Sake</title>
 
         <environment include="Development">
             <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
@@ -27,10 +27,11 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">For Book's Sake</a>
+                    <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">For Books Sake</a>
                 </div>
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
+                        <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
                         <li><a asp-area="" asp-controller="Home" asp-action="MyBookshelf">My Bookshelf</a></li>
                         <li><a asp-area="" asp-controller="Home" asp-action="FindABook">Find A Book</a></li>
                         <li><a asp-area="" asp-controller="Home" asp-action="AddBooks">Book Scanner</a></li>
@@ -49,7 +50,7 @@
             @RenderBody()
             <hr />
             <footer>
-                <p>&copy; 2019 - Library</p>
+                <p>&copy; 2019 - Lost at C</p>
             </footer>
         </div>
 
