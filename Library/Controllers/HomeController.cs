@@ -36,13 +36,16 @@ namespace Library.Controllers
 
         public IActionResult AddBooks()
         {
+
             if(HttpContext.Session.GetObjectFromJson<User>("newUser") == null)
             {
                 return Redirect("/");
             }
+            All_Book_info AllBookInfo = new All_Book_info(_context);
+
             Console.WriteLine("In the barcode reader clas..................---------------------");
 
-            return  View();
+            return  View(AllBookInfo);
         }
 
         public IActionResult Register()
@@ -227,7 +230,7 @@ namespace Library.Controllers
         }
 
         [HttpPost]
-        public IActionResult addMultipleBooks(string ISBNs, string Titles, string Authors)
+        public IActionResult addMultipleBooks(string ISBNs, string Titles, string Authors, string ImageURLs, string Descriptions, string Links)
         {
           // User newUser = HttpContext.Session.GetObjectFromJson<User>("newUser");
           long UserId = HttpContext.Session.GetObjectFromJson<User>("newUser").Id;
@@ -235,7 +238,11 @@ namespace Library.Controllers
           string[] ISBNArray = ISBNs.Split(',');
           string[] AuthorArray = Authors.Split(',');
           string[] TitleArray = Titles.Split(',');
+          string[] ImageURLArray = ImageURLs.Split(',');
+          string[] DescriptionsArray = Descriptions.Split(',');
+          string[] LinksArray = Links.Split(',');
           Console.WriteLine(ISBNs);
+          Console.WriteLine(ImageURLs);
 
           for (var i = 1; i < ISBNArray.Length; i++)
           {
@@ -243,7 +250,13 @@ namespace Library.Controllers
               Console.WriteLine(TitleArray[i]);
               Console.WriteLine(AuthorArray[i]);
               Console.WriteLine(ISBNArray[i]);
+
                _context.Books.Add(new Book { Author = AuthorArray[i], Title = TitleArray[i], ISBN = ISBNArray[i], OwnerId = UserId, Available = true  });
+               All_Book_info all_Book_info = new All_Book_info(_context);
+               if (!all_Book_info.ContainsBook(ISBNArray[i]))
+               {
+                 _context.Book_info.Add(new Book_info { ISBN = ISBNArray[i], Author = AuthorArray[i], Title = TitleArray[i], ImageUrl = ImageURLArray[i], Description = DescriptionsArray[i], LinkToGoogleBooks = LinksArray[i] });
+               }
           }
           _context.SaveChanges();
           return Redirect("/Home/MyBookshelf");

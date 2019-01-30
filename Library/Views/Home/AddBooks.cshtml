@@ -3,6 +3,21 @@
     ViewData["Title"] = "Add Books";
 }
 
+
+    <div id="AllISBNs" style="display:none">@Model.allISBNs()</div>
+    @foreach (var book in @Model.getAllBookInfo())
+    {
+      <div id="Title_@book.ISBN" value="" style="display:none">@book.Title</div>
+      <div id="Author_@book.ISBN" style="display:none">@book.Author</div>
+      <div id="ImageUrl_@book.ISBN" style="display:none">@book.ImageUrl</div>
+
+      <div id="Author_@book.ISBN" style="display:none">@book.Description</div>
+      <div id="Link_@book.ISBN" style="display:none">@book.LinkToGoogleBooks</div>
+
+    }
+
+
+
 <div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="10000000">
         <ol class="carousel-indicators">
             <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
@@ -39,6 +54,9 @@
     <input id="ISBNs" name="ISBNs" value="ISBNs" type="hidden"></input>
     <input id="Authors" name="Authors" value="Authors" type="hidden"></input>
     <input id="Titles" name="Titles" value="Titles" type="hidden"></input>
+    <input id="ImageUrls" name="ImageUrls" value="ImageUrls" type="hidden"></input>
+    <input id="Description" name="Descriptions" value="Descriptions" type="hidden"></input>
+    <input id="Links" name="Links" value="Links" type="hidden"></input>
     <input type="submit">
   </form>
 
@@ -71,7 +89,6 @@
     <script src="https://demo.dynamsoft.com/dbr_wasm/js/dbr-6.4.1.1.min.js"></script>
 
     <script>
-        $('#ResultsHolder').append("This is a appendment");
     // By default, js will load `dbr-<version>.min.js` & `dbr-<version>.wasm` in the same folder as the context.
         // `dbr-<version>.min.js` & `dbr-<version>.wasm` should always put in same folder.
         // Modify this setting when you put `dbr-<version>.min.js` & `dbr-<version>.wasm` somewhere else.
@@ -153,6 +170,37 @@
                       kConsoleLog(result.BarcodeText);
                       $('#Hidden_ISBNs').append(","+result.BarcodeText);
 
+                      if ($('#AllISBNs').text().includes(result.BarcodeText))
+                      {
+                          //search for this
+
+                          console.log("ISBN already in book_info");
+                          var contents = $('#scanned_books_1').html();
+                          var count = (contents.match(/<img/g) || []).length + 1;
+                          console.log(count);
+                          num_of_scanned_books=count;
+                          var slide_num = Math.floor(num_of_scanned_books/6) + 1;
+                          var title = $('#Title_'+result.BarcodeText).text();
+                          var author = $('#Author_'+result.BarcodeText).text();
+                          var image_url = $('#ImageUrl_'+result.BarcodeText).text();
+                          var description = $('#Description_'+result.BarcodeText).text();
+                          var link = $('#Link_'+result.BarcodeText).text();
+                          $('input[name="Authors"]').val($('input[name="Authors"]').val()+","+author);
+                          $('input[name="Titles"]').val($('input[name="Titles"]').val()+","+title);
+                          $('input[name="ImageUrls"]').val($('input[name="ImageUrls"]').val()+","+image_url);
+                          $('input[name="Descriptions"]').val($('input[name="Descriptions"]').val()+","+description);
+                          $('input[name="Links"]').val($('input[name="Links"]').val()+","+link);
+
+                          if (count == 1)
+                          {
+                            $('#scanned_books_'+slide_num).html('');
+                          }
+                          $('#scanned_books_'+slide_num).append("<img src='"+image_url+"' style='display:inline-block; '/>    ");
+
+
+                      }
+                      else
+                      {
                       var googleAPI = "https://www.googleapis.com/books/v1/volumes?q="+result.BarcodeText;
 
                       $.getJSON(googleAPI, function (response) {
@@ -166,15 +214,22 @@
                           var title = item.volumeInfo.title;
                           var author = item.volumeInfo.authors[0];
                           var image_url = item.volumeInfo.imageLinks.thumbnail;
+                          var description = item.volumeInfo.description;
+                          var link = item.selfLink;
                           $('input[name="Authors"]').val($('input[name="Authors"]').val()+","+author);
                           $('input[name="Titles"]').val($('input[name="Titles"]').val()+","+title);
+                          $('input[name="ImageUrls"]').val($('input[name="ImageUrls"]').val()+","+image_url);
+                          $('input[name="Descriptions"]').val($('input[name="Descriptions"]').val()+","+description);
+                          $('input[name="Links"]').val($('input[name="Links"]').val()+","+link);
                           if (count == 1)
                           {
                             $('#scanned_books_'+slide_num).html('');
                           }
                           $('#scanned_books_'+slide_num).append("<img src='"+image_url+"' style='display:inline-block; '/>    ");
-                      });
 
+                          });
+
+                        }
 
                       $('input[name="ISBNs"]').val($('input[name="ISBNs"]').val()+","+result.BarcodeText);
 

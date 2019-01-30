@@ -27,6 +27,7 @@ namespace Library.Models
             var books =  this._context.Books.ToList();
             this.AvailableBooks = books.Where(book => book.OwnerId == userid && book.Available == true);
             this.UnavailableBooks = books.Where(book => book.OwnerId == userid && book.Available == false);
+
             if (this.AvailableBooks.Count() > 0 )
             {
               this.NoAvailableBooks = false;
@@ -45,5 +46,8 @@ namespace Library.Models
         {
           return this.UnavailableBooks;
         }
+
+
+
     }
 }

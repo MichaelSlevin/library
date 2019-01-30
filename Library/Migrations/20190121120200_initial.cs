@@ -23,6 +23,21 @@ namespace Library.Migrations
                 {
                     table.PrimaryKey("PK_Books", x => x.Id);
                 });
+                migrationBuilder.CreateTable(
+                    name: "Book_info",
+                    columns: table => new
+                    {
+                        ISBN = table.Column<string>(nullable: false),
+                        Author = table.Column<string>(nullable: false),
+                        Title = table.Column<string>(nullable: false),
+                        Description = table.Column<string>(nullable: false),
+                        ImageUrl = table.Column<string>(nullable: false),
+                        LinkToGoogleBooks = table.Column<string>(nullable: false)
+                    },
+                    constraints: table =>
+                    {
+                        table.PrimaryKey("PK_Book_info", x => x.ISBN);
+                    });
 
             migrationBuilder.CreateTable(
                 name: "Users",
@@ -55,6 +70,8 @@ namespace Library.Migrations
                 name: "Books");
             migrationBuilder.DropTable(
                 name: "Users");
+            migrationBuilder.DropTable(
+                name: "Book_info");
         }
     }
 }
