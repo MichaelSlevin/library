@@ -49,6 +49,19 @@ namespace Library.Migrations
 
                 b.ToTable("Users");
             });
+            modelBuilder.Entity("Library.Models.Book_info", b =>
+            {
+              b.Property<string>("ISBN");
+              b.Property<string>("Author");
+              b.Property<string>("Title");
+              b.Property<string>("Description");
+              b.Property<string>("ImageUrl");
+              b.Property<string>("LinkToGoogleBooks");
+
+              b.HasKey("ISBN");
+
+              b.ToTable("Book_info");
+            });
 #pragma warning restore 612, 618
         }
     }
