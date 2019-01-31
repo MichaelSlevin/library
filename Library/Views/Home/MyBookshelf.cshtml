@@ -32,13 +32,13 @@
                                 @foreach (var book in @Model.getAvailableBooks())
                                 {
 
-                                    <img src="@book.ImageUrl" />;
+                                    <img src="@book.ImageUrl" />
                                     <br />
-                                    @book.Title;
+                                    <b>@book.Title</b>
                                     <br />
-                                    @book.Author;
+                                    <em>by @book.Author</em>
                                     <br />
-                                    @book.ISBN;
+                                    <a href="@book.LinkToGoogleBooks">More info</a>
                                     <br />
 
                                     <form action="/Home/RemoveBook" method="post">
@@ -52,7 +52,7 @@
                                         <input type="hidden" name="availability" value="false">
                                         <input type="submit" value="Make unavailable">
                                     </form>
-
+                                    <br />
                                     <br />
                                 }
                             }
@@ -77,11 +77,11 @@
                                 {
                                     <img src="@book.ImageUrl" />;
                                     <br />
-                                    @book.Title;
+                                    <b>@book.Title</b>
                                     <br />
-                                    @book.Author;
+                                    <em>by @book.Author</em>
                                     <br />
-                                    @book.ISBN;
+                                    <a href="@book.LinkToGoogleBooks">More info</a>
                                     <br />
 
                                     <form action="/Home/RemoveBook" method="post">
@@ -96,7 +96,7 @@
                                         <input type="hidden" name="availability" value="true">
                                         <input type="submit" value="Make available">
                                     </form>
-
+                                    <br />
                                     <br />
                                 }
                             }
