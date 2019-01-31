@@ -214,7 +214,7 @@
                           var author = item.volumeInfo.authors[0];
                           var image_url = item.volumeInfo.imageLinks.thumbnail;
                           var description = item.volumeInfo.description;
-                          var link = item.selfLink;
+                          var link = item.volumeInfo.infoLink;
                           $('input[name="Authors"]').val($('input[name="Authors"]').val()+","+author);
                           $('input[name="Titles"]').val($('input[name="Titles"]').val()+","+title);
                           $('input[name="ImageUrls"]').val($('input[name="ImageUrls"]').val()+","+image_url);
