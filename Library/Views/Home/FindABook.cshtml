@@ -4,6 +4,10 @@
 }
 <br />
 <br />
+@foreach(var b in @Model.GetAllBooksWithUser())
+{
+    <img src="@b.ImageUrl" />
+}
 
 <div id="main">
     @*<div class="row" id="row_1">

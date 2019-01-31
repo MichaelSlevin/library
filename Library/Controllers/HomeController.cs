@@ -206,6 +206,8 @@ namespace Library.Controllers
             var bookWithUser = (from book in _context.Books
                                 join user in _context.Users
                                 on book.OwnerId equals user.Id
+                                join bookinfo in _context.Book_info
+                                on book.ISBN equals bookinfo.ISBN
                                 select new
                                 {
                                     Id = book.Id,
@@ -215,14 +217,17 @@ namespace Library.Controllers
                                     Available = book.Available,
                                     FullName = user.FullName,
                                     Email = user.Email,
-                                    PhoneNumber = user.PhoneNumber
+                                    PhoneNumber = user.PhoneNumber,
+                                    ImageUrl = bookinfo.ImageUrl,
+                                    Description = bookinfo.Description,
+                                    LinkToGoogleBooks = bookinfo.LinkToGoogleBooks
                                 }).ToList();
 
             List<BookWithUser> booksWithUser = new List<BookWithUser>();
 
             foreach (var book in bookWithUser)
             {
-                booksWithUser.Add(new BookWithUser(book.Id, book.Author, book.Title, book.ISBN, book.Available, book.FullName, book.Email, book.PhoneNumber));
+                booksWithUser.Add(new BookWithUser(book.Id, book.Author, book.Title, book.ISBN, book.Available, book.FullName, book.Email, book.PhoneNumber,book.ImageUrl,book.Description,book.LinkToGoogleBooks));
             }
             BookList bookList = new BookList(_context, booksWithUser);
 

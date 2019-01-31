@@ -17,8 +17,11 @@ namespace Library.Models
         public string FullName;
         public string Email;
         public string PhoneNumber;
+        public string ImageUrl;
+        public string Description;
+        public string LinkToGoogleBooks;
 
-        public BookWithUser(long Id, string Author, string Title, string ISBN, bool Available, string FullName, string Email, string PhoneNumber)
+        public BookWithUser(long Id, string Author, string Title, string ISBN, bool Available, string FullName, string Email, string PhoneNumber, string ImageUrl, string Description, string LinkToGoogleBooks)
         {
             this.Id = Id;
             this.Author = Author;
@@ -28,6 +31,9 @@ namespace Library.Models
             this.FullName = FullName;
             this.Email = Email;
             this.PhoneNumber = PhoneNumber;
+            this.ImageUrl = ImageUrl;
+            this.Description = Description;
+            this.LinkToGoogleBooks = LinkToGoogleBooks;
         }
     }
 }
