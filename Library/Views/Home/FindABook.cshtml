@@ -5,6 +5,7 @@
 <br />
 <br />
 
+
 <div id="main">
     @*<div class="row" id="row_1">
             <div class="col-md-4" id="cell_1"></div>
@@ -26,53 +27,31 @@
 {
 
     i = i + 1;
-    rowNumber = ((i - 1) / 3) + 1;
+    rowNumber = ((i - 1) / 4) + 1;
 
 
 
-    @if (i % 3 == 1)
+    @if (i % 4 == 1)
     {
         <script> $('#main').append('<div class="row" id="row_@rowNumber"></div>');</script>
 
     }
 
         <script>
-    $('#row_@rowNumber').append('<div class="col-md-4" id="cell_@i">');
+    $('#row_@rowNumber').append('<div class="col-md-3" id="cell_@i">');
+    $('#cell_@i').append("<img src='@book.ImageUrl' />");
      $('#row_@rowNumber').append('</div>');
 
-            var googleAPI = "https://www.googleapis.com/books/v1/volumes?q="+@book.ISBN;
-
-    $.getJSON(googleAPI, function (response) {
-       var item = response.items[0];
-       var infoLink = item.volumeInfo.infoLink;
-       var image_url = item.volumeInfo.imageLinks.thumbnail;
-
-       console.log("item.volumeInfo.infoLink is: " + JSON.stringify(infoLink));
-
-       $('#cell_@i').append("<img src='"+image_url+"' />");
-    });
 
     @*$('#cell_@rowNumber').append("@book.ISBN");*@
-    $('#cell_@i').append("Title - <b>@book.Title</strong></b></p>");
-    $('#cell_@i').append("Author - <b>@book.Author</b></p>");
-    $('#cell_@i').append("ISBN - @book.ISBN</p>");
-
-
-
-
-
-        </script>
+    $('#cell_@i').append("<p><b>@book.Title</b></p>");
+    $('#cell_@i').append("<em>by @book.Author</em></p>");
+  </script>
 
 
     @if (book.Available == true)
     {
-    <script>$('#cell_@i').append("<p><a href='mailto:@book.Email'>Request the book</a></p>");</script>
-@*<script>$('#cell_@i').append("<select><option value="Request">Request</option></select>");</script>*@
-@*<script>$('#cell_@i').append("");</script>
-    <script>$('#cell_@i').append("<option value="Name">Name: @book.FullName</option>");</script>
-    <script>$('#cell_@i').append("<option value="Email">Email: @book.Email</option>");</script>
-    <script>$('#cell_@i').append("<option value="Phone Number">Phone: @book.PhoneNumber</option>");</script>
-    <script>$('#cell_@i').append("</select>");</script>*@
+    <script>$('#cell_@i').append("<select><option value='Request'>Request</option><option value='Name'>Name: @book.FullName</option><option value='Email'>Email: @book.Email</option><option value='Phone Number'>Phone: @book.PhoneNumber</option></select>");</script>
     }
 else
 {

@@ -96,8 +96,31 @@ namespace Library.Controllers
             {
                 return Redirect("/");
             }
+            var bookWithInfo = (from book in _context.Books
+                                join bookinfo in _context.Book_info
+                                on book.ISBN equals bookinfo.ISBN
+                                select new
+                                {
+                                    Id = book.Id,
+                                    OwnerId = book.OwnerId,
+                                    Author = book.Author,
+                                    Title = book.Title,
+                                    ISBN = book.ISBN,
+                                    Available = book.Available,
+                                    ImageUrl = bookinfo.ImageUrl,
+                                    Description = bookinfo.Description,
+                                    LinkToGoogleBooks = bookinfo.LinkToGoogleBooks
+                                }).ToList();
+
+            List<BookWithInfo> booksWithInfo = new List<BookWithInfo>();
+
+            foreach (var book in bookWithInfo)
+            {
+                booksWithInfo.Add(new BookWithInfo(book.Id, book.OwnerId, book.Author, book.Title, book.ISBN, book.Available, book.ImageUrl, book.Description, book.LinkToGoogleBooks));
+            }
+
             long UserId = HttpContext.Session.GetObjectFromJson<User>("newUser").Id;
-            Bookshelf newBookshelf = new Bookshelf(UserId, _context);
+            Bookshelf newBookshelf = new Bookshelf(UserId, _context, booksWithInfo);
             return View(newBookshelf);
         }
 
@@ -183,6 +206,8 @@ namespace Library.Controllers
             var bookWithUser = (from book in _context.Books
                                 join user in _context.Users
                                 on book.OwnerId equals user.Id
+                                join bookinfo in _context.Book_info
+                                on book.ISBN equals bookinfo.ISBN
                                 select new
                                 {
                                     Id = book.Id,
@@ -192,14 +217,17 @@ namespace Library.Controllers
                                     Available = book.Available,
                                     FullName = user.FullName,
                                     Email = user.Email,
-                                    PhoneNumber = user.PhoneNumber
+                                    PhoneNumber = user.PhoneNumber,
+                                    ImageUrl = bookinfo.ImageUrl,
+                                    Description = bookinfo.Description,
+                                    LinkToGoogleBooks = bookinfo.LinkToGoogleBooks
                                 }).ToList();
 
             List<BookWithUser> booksWithUser = new List<BookWithUser>();
 
             foreach (var book in bookWithUser)
             {
-                booksWithUser.Add(new BookWithUser(book.Id, book.Author, book.Title, book.ISBN, book.Available, book.FullName, book.Email, book.PhoneNumber));
+                booksWithUser.Add(new BookWithUser(book.Id, book.Author, book.Title, book.ISBN, book.Available, book.FullName, book.Email, book.PhoneNumber,book.ImageUrl,book.Description,book.LinkToGoogleBooks));
             }
             BookList bookList = new BookList(_context, booksWithUser);
 

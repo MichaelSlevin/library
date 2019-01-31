@@ -13,6 +13,7 @@
 
 <br />
 
+
 <section class="bg-grey-50 padding-top-60 padding-top-sm-30">
     <div class="container">
         <div class="row">
@@ -30,34 +31,15 @@
                             {
                                 @foreach (var book in @Model.getAvailableBooks())
                                 {
-                                    <script>
-                                    var googleAPI = "https://www.googleapis.com/books/v1/volumes?q="+@book.ISBN;
 
-                                    $.getJSON(googleAPI, function (response) {
-                                       var item = response.items[0];
-                                       var infoLink = item.volumeInfo.infoLink;
-                                       var image_url = item.volumeInfo.imageLinks.thumbnail;
-
-                                       console.log("item.volumeInfo.infoLink is: " + JSON.stringify(infoLink));
-
-                                       $('#ResultsHolder_@book.ISBN').append("<div id='scannedBook'><img src='"+image_url+"' />" +"</div>");
-                                       $('#MoreInfoHolder_@book.ISBN').append("<div id='scannedBook'><a href='"+infoLink+"'>More Info</a></div>");
-                                    });
-                                    </script>
-
-
-                                    <div id="ResultsHolder_@book.ISBN">
-                                    </div>
-
+                                    <img src="@book.ImageUrl" />;
+                                    <br />
                                     @book.Title;
                                     <br />
                                     @book.Author;
                                     <br />
                                     @book.ISBN;
                                     <br />
-
-                                    <div id="MoreInfoHolder_@book.ISBN">
-                                    </div>
 
                                     <form action="/Home/RemoveBook" method="post">
                                         <input type="hidden" name="userid" value="@Model.UserId">
@@ -93,34 +75,14 @@
                             {
                                 @foreach (var book in @Model.getUnavailableBooks())
                                 {
-                                    <script>
-                                    googleAPI = "https://www.googleapis.com/books/v1/volumes?q=" + @book.ISBN;
-
-                                    $.getJSON(googleAPI, function (response) {
-                                       var item = response.items[0];
-                                       var infoLink = item.volumeInfo.infoLink;
-                                       var image_url = item.volumeInfo.imageLinks.thumbnail;
-
-                                       console.log("item.volumeInfo.infoLink is: " + JSON.stringify(infoLink));
-
-                                       $('#ResultsHolder_@book.ISBN').append("<div id='scannedBook'><img src='"+image_url+"' />" +"</div>");
-                                       $('#MoreInfoHolder_@book.ISBN').append("<div id='scannedBook'><a href='"+infoLink+"'>More Info</a></div>");
-                                    });
-                                    </script>
-
-                                    <p></p>
-                                    <div id="ResultsHolder_@book.ISBN">
-                                    </div>
-
+                                    <img src="@book.ImageUrl" />;
+                                    <br />
                                     @book.Title;
                                     <br />
                                     @book.Author;
                                     <br />
                                     @book.ISBN;
                                     <br />
-
-                                    <div id="MoreInfoHolder_@book.ISBN">
-                                    </div>
 
                                     <form action="/Home/RemoveBook" method="post">
                                         <input type="hidden" name="userid" value="@Model.UserId">
